@@ -13,7 +13,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define WIFI_SSID "Devices"
 #define WIFI_PASSWORD ""
-#define REDIS_ADDR "10.0.38.59"
+#define REDIS_ADDR "10.0.6.106"
 #define REDIS_PORT 6379
 #define REDIS_PASSWORD ""
 
@@ -102,21 +102,21 @@ void loop() {
 
     display.printf("Temperat. %.2f%cC\n",bme.readTemperature(),248);
     snprintf(temperature,16,"%.2f",bme.readTemperature());
-    redis.set("uSIMAR:Testes:Temp-Mon", temperature);
+    redis.set("Temperature", temperature);
 
     display.printf("Pressure %.2fPa\n",bme.readPressure()/100.0F);
     snprintf(pressure,16,"%.2f",bme.readPressure()/100.0F);
-    redis.set("uSIMAR:Testes:Pressure-Mon", pressure);
+    redis.set("Pressure", pressure);
 
     display.printf("Altitude %.2fm\n",bme.readAltitude(SEALEVELPRESSURE_HPA));
     snprintf(altitude,16,"%.2f",bme.readAltitude(SEALEVELPRESSURE_HPA));
-    redis.set("uSIMAR:Testes:Altitude-Mon", altitude);
+    redis.set("Altitude", altitude);
 
-    display.printf("Humidity %.2f%%",bme.readHumidity());
+    display.printf("Humidity %.2fg.Kg-1",bme.readHumidity());
     snprintf(humidity,16,"%.2f",bme.readHumidity());
-    redis.set("uSIMAR:Testes:Humidity-Mon", humidity);
+    redis.set("Humidity", humidity);
 
     display.display();
-    delay(2000);
+    delay(4000);
     display.clearDisplay();
 }

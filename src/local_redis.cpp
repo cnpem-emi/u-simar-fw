@@ -7,9 +7,9 @@ WiFiClient redisConn;
 //Variable Redis
 Redis redis(redisConn);
 
-String version_in_Redis;
+int version_in_Redis;
 //Colocar a versão atual do firmware
-String versionCurrent = "1";
+int versionCurrent = 0;
 
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){
@@ -53,9 +53,9 @@ void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on
         Serial.println("Number of samples for mean:"+nmean);
         *number_samples_mean = nmean.toInt();
 
-        version_in_Redis= redis.get("uSIMAR:Testes:Number_Sample-SP");
-        Serial.println("Number of samples for mean:"+nmean);
-        
+        String v = redis.get("uSIMAR:Testes:Version-SP");
+        Serial.println("Version in Redis:"+v);
+        version_in_Redis = v.toInt();
 
     }
     else
@@ -106,22 +106,20 @@ void checkUpdate()
     //Define timeout
     int timeout = 2000;
 
-
+    if (versionCurrent != version_in_Redis)//verifica se as verões são diferentes 
+    {
+    Serial.println("Version: " + versionCurrent);
     //Inicializa conexão por HTTP para acessar o firmware no servidor
     HTTPClient http;
-    http.begin("");
+    http.begin("https://github.com/cnpem-sei/u-simar-fw/tree/organizado/.pio/build/esp32doit-devkit-v1");
     http.setConnectTimeout(timeout);
     http.setTimeout(timeout);
     int resCode = http.GET();
     if (resCode > 0)
-    {
-
-        Serial.println("Version: " + version_in_Redis);
-        if (versionCurrent != version_in_Redis)//verofica se as verões são diferentes 
-        {
+    {         
             //Se a versão for diferente da atual neste código, inicializa a atualização
             updateOTA();
-        }
+    }
     }
 }
 
@@ -133,7 +131,7 @@ void updateOTA() //Função de atualização via OTA
     {
 
         //Realiza o download do firmware (.bin) e realiza a atualização
-        t_httpUpdate_return ret = ESPhttpUpdate.update("");
+        t_httpUpdate_return ret = ESPhttpUpdate.update("https://github.com/cnpem-sei/u-simar-fw/blob/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
         
         //Switch para tratamento da resposta
         switch (ret)

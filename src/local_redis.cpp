@@ -9,7 +9,7 @@ Redis redis(redisConn);
 
 int version_in_Redis;
 //Colocar a versão atual do firmware
-int versionCurrent = 0;
+int versionCurrent = '1';
 
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){
@@ -134,7 +134,7 @@ void updateOTA() //Função de atualização via OTA
 
         //Realiza o download do firmware (.bin) e realiza a atualização
         
-        t_httpUpdate_return ret = ESPhttpUpdate.update("https://raw.githubusercontent.com/esp8266/Basic/master/Flasher/Build/4M/ESP8266Basic.cpp.bin");
+        t_httpUpdate_return ret = ESPhttpUpdate.update("https://raw.githubusercontent.com/cnpem-sei/u-simar-fw/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
         
         //Switch para tratamento da resposta
         switch (ret)

@@ -20,5 +20,6 @@
 
 void redisStart (float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean);
 void redis_update_BME280_data (float temperature_rtc,float pressure_rtc, float altitude_rtc,float humidity_rtc);
+void updateOTA();
 
 #endif //_REDIS_H_

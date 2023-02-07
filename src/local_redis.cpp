@@ -134,7 +134,7 @@ void updateOTA() //Função de atualização via OTA
 
         //Realiza o download do firmware (.bin) e realiza a atualização
         
-        t_httpUpdate_return ret = ESPhttpUpdate.update("https://github.com/cnpem-sei/u-simar-fw/blob/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
+        t_httpUpdate_return ret = ESPhttpUpdate.update("https://raw.githubusercontent.com/esp8266/Basic/master/Flasher/Build/4M/ESP8266Basic.cpp.bin");
         
         //Switch para tratamento da resposta
         switch (ret)

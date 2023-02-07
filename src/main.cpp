@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "main.h"
 
+
 //declaration for Wifi connection
 #define WIFI_SSID "Devices"
 #define WIFI_PASSWORD ""

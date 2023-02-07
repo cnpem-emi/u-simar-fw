@@ -1,4 +1,7 @@
 #include "deep_sleep.h"
+#include "driver/rtc_io.h"
+#include "soc/rtc_cntl_reg.h"
+#include "soc/rtc.h"
 
 
 touch_pad_t touchPin;
@@ -54,9 +57,13 @@ void hibernation_sleep(float time_deep_sleep){
     esp_sleep_enable_timer_wakeup(time_deep_sleep * 60L * 1000000L);
     //set CPU frequency 
     setCpuFrequencyMhz(80);
+    
+    rtc_gpio_isolate(GPIO_NUM_2);
+
     // Go to sleep! Zzzz
     esp_deep_sleep_start();
 
+    
 }
 
 

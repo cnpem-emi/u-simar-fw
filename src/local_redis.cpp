@@ -1,9 +1,16 @@
 #include "local_redis.h"
 #include <Redis.h>
+#include <HTTPClient.h> //Biblioteca para realizar requisições por HTTP
+#include <ESP32httpUpdate.h> //Biblioteca que possibilita OTA por checagem HTTP
 
 WiFiClient redisConn;
 //Variable Redis
 Redis redis(redisConn);
+
+String version_in_Redis;
+//Colocar a versão atual do firmware
+String versionCurrent = "1";
+
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){
 
@@ -45,6 +52,10 @@ void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on
         String nmean = redis.get("uSIMAR:Testes:Number_Sample-SP");
         Serial.println("Number of samples for mean:"+nmean);
         *number_samples_mean = nmean.toInt();
+
+        version_in_Redis= redis.get("uSIMAR:Testes:Number_Sample-SP");
+        Serial.println("Number of samples for mean:"+nmean);
+        
 
     }
     else
@@ -88,4 +99,56 @@ void redis_update_BME280_data(float temperature_rtc,float pressure_rtc, float al
     redis.set("uSIMAR:Testes:Humidity-Mon", humidity);
     Serial.println("uSIMAR:Testes:Humidity-Mon:"+String(humidity));
 
+}
+
+void checkUpdate()
+{
+    //Define timeout
+    int timeout = 2000;
+
+
+    //Inicializa conexão por HTTP para acessar o firmware no servidor
+    HTTPClient http;
+    http.begin("");
+    http.setConnectTimeout(timeout);
+    http.setTimeout(timeout);
+    int resCode = http.GET();
+    if (resCode > 0)
+    {
+
+        Serial.println("Version: " + version_in_Redis);
+        if (versionCurrent != version_in_Redis)//verofica se as verões são diferentes 
+        {
+            //Se a versão for diferente da atual neste código, inicializa a atualização
+            updateOTA();
+        }
+    }
+}
+
+void updateOTA() //Função de atualização via OTA
+{
+
+    //Se houver conexão WiFi
+    if ((WiFi.status() == WL_CONNECTED))
+    {
+
+        //Realiza o download do firmware (.bin) e realiza a atualização
+        t_httpUpdate_return ret = ESPhttpUpdate.update("");
+        
+        //Switch para tratamento da resposta
+        switch (ret)
+        {
+        case HTTP_UPDATE_FAILED: //Falha
+            Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
+            break;
+
+        case HTTP_UPDATE_NO_UPDATES: //Ausência do arquivo de firmware
+            Serial.println("HTTP_UPDATE_NO_UPDATES");
+            break;
+
+        case HTTP_UPDATE_OK: //Sucesso
+            Serial.println("HTTP_UPDATE_OK");
+            break;
+        }
+    }
 }

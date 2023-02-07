@@ -56,6 +56,7 @@ void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on
         String v = redis.get("uSIMAR:Testes:Version-SP");
         Serial.println("Version in Redis:"+v);
         version_in_Redis = v.toInt();
+        checkUpdate();
 
     }
     else
@@ -146,6 +147,7 @@ void updateOTA() //Função de atualização via OTA
 
         case HTTP_UPDATE_OK: //Sucesso
             Serial.println("HTTP_UPDATE_OK");
+            versionCurrent = version_in_Redis;
             break;
         }
     }

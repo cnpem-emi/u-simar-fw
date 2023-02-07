@@ -109,13 +109,14 @@ void checkUpdate()
 
     if (versionCurrent != version_in_Redis)//verifica se as verões são diferentes 
     {
-    Serial.println("Version: " + String(versionCurrent));
+    
     //Inicializa conexão por HTTP para acessar o firmware no servidor
     HTTPClient http;
     http.begin("https://github.com/cnpem-sei/u-simar-fw/tree/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
     http.setConnectTimeout(timeout);
     http.setTimeout(timeout);
     int resCode = http.GET();
+    Serial.println("Version: " + String(versionCurrent));
     if (resCode > 0)
     {         
             //Se a versão for diferente da atual neste código, inicializa a atualização
@@ -132,7 +133,8 @@ void updateOTA() //Função de atualização via OTA
     {
 
         //Realiza o download do firmware (.bin) e realiza a atualização
-        t_httpUpdate_return ret = ESPhttpUpdate.update("github.com/cnpem-sei/u-simar-fw/raw/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
+        
+        t_httpUpdate_return ret = ESPhttpUpdate.update("https://github.com/cnpem-sei/u-simar-fw/blob/organizado/.pio/build/esp32doit-devkit-v1/firmware.bin");
         
         //Switch para tratamento da resposta
         switch (ret)

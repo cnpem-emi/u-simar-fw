@@ -39,6 +39,9 @@ void setup()
     turn_off_display();
     cut_off_display = false; 
     DateTime now;
+    Serial.println("tempo antigo: "+String(time_init_deep_sleep));
+    Serial.println("tempo novo: "+String(now.unixtime()));
+    Serial.println("Diferença: "+String(time_init_deep_sleep - now.unixtime()));
     hibernation_sleep((time_init_deep_sleep - now.unixtime())/60); 
   }
   //verify sensor connection

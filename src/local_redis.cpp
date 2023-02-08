@@ -10,7 +10,7 @@ Redis redis(redisConn);
 
 int version_in_Redis;
 //Colocar a versão atual do firmware
-int versionCurrent = 1;
+int versionCurrent = 2;
 
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){
@@ -107,7 +107,7 @@ void redis_update_BME280_data(float temperature_rtc,float pressure_rtc, float al
 void checkUpdate()
 {
     //Define timeout
-    int timeout = 2000;
+    int timeout = 4000;
 
     if (versionCurrent != version_in_Redis)//verifica se as verões são diferentes 
     {

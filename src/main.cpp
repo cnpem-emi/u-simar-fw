@@ -40,9 +40,9 @@ void setup()
     cut_off_display = false; 
     DateTime now;
     Serial.println("tempo antigo: "+String(time_init_deep_sleep));
-    Serial.println("tempo novo: "+String(now.unixtime()));
-    Serial.println("Diferença: "+String(time_init_deep_sleep - now.unixtime()));
-    hibernation_sleep((time_init_deep_sleep - now.unixtime())/60); 
+    Serial.println("tempo novo: "+String(now.secondstime()));
+    Serial.println("Diferença: "+String(time_init_deep_sleep - now.secondstime()));
+    hibernation_sleep((time_init_deep_sleep - now.secondstime())/60); 
   }
   //verify sensor connection
  BME280_status();
@@ -77,7 +77,7 @@ void loop() {
 
   submit_for_redis();//Submit the informations for the Redis
   DateTime now;
-  time_init_deep_sleep =  now.unixtime();
+  time_init_deep_sleep =  now.secondstime();
   hibernation_sleep(deep_sleep_time);
 
 }

@@ -38,8 +38,8 @@ void setup()
     Serial.println("Entrou"+String(cut_off_display));
     turn_off_display();
     cut_off_display = false; 
-    DateTime now;
-    now.second();
+    RTC_DS3231 hour;
+    DateTime now =  hour.now();
     Serial.println("tempo antigo: "+String(time_init_deep_sleep));
     Serial.println("tempo novo: "+String(now.second()));
     Serial.println("Diferença: "+String(time_init_deep_sleep - now.second()));
@@ -77,8 +77,10 @@ void loop() {
   print_wakeup_touchpad();
 
   submit_for_redis();//Submit the informations for the Redis
-  DateTime now;
-  time_init_deep_sleep =  now.secondstime();
+  RTC_DS3231 hour;
+  DateTime now =  hour.now();
+  time_init_deep_sleep = now.unixtime();
+
   hibernation_sleep(deep_sleep_time);
 
 }

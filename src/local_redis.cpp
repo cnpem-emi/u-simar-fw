@@ -10,7 +10,7 @@ Redis redis(redisConn);
 
 int version_in_Redis;
 //Colocar a versão atual do firmware
-int versionCurrent = 1;
+int versionCurrent = 2;
 
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){

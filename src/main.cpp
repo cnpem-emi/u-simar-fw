@@ -39,10 +39,11 @@ void setup()
     turn_off_display();
     cut_off_display = false; 
     DateTime now;
+    now.second();
     Serial.println("tempo antigo: "+String(time_init_deep_sleep));
-    Serial.println("tempo novo: "+String(now.secondstime()));
-    Serial.println("Diferença: "+String(time_init_deep_sleep - now.secondstime()));
-    hibernation_sleep((time_init_deep_sleep - now.secondstime())/60); 
+    Serial.println("tempo novo: "+String(now.second()));
+    Serial.println("Diferença: "+String(time_init_deep_sleep - now.second()));
+    hibernation_sleep((time_init_deep_sleep - now.second())/60); 
   }
   //verify sensor connection
  BME280_status();

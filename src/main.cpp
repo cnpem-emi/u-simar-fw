@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <WiFi.h>
 #include "main.h"
+#include <RTClib.h>
 
 
 //declaration for Wifi connection
@@ -21,6 +22,7 @@ RTC_DATA_ATTR float altitude_rtc;
 RTC_DATA_ATTR float humidity_rtc; 
 //Variable RTC for verification if the display turn off after de time of display
 RTC_DATA_ATTR boolean cut_off_display;
+RTC_DATA_ATTR uint32_t time_init_deep_sleep;  
   
 void setup()
 {
@@ -36,7 +38,8 @@ void setup()
     Serial.println("Entrou"+String(cut_off_display));
     turn_off_display();
     cut_off_display = false; 
-    hibernation_sleep(deep_sleep_time); 
+    DateTime now;
+    hibernation_sleep((time_init_deep_sleep - now.unixtime())/60); 
   }
   //verify sensor connection
  BME280_status();
@@ -70,7 +73,8 @@ void loop() {
   print_wakeup_touchpad();
 
   submit_for_redis();//Submit the informations for the Redis
-
+  DateTime now;
+  time_init_deep_sleep =  now.unixtime();
   hibernation_sleep(deep_sleep_time);
 
 }

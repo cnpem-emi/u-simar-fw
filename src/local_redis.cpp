@@ -3,13 +3,14 @@
 #include <HTTPClient.h> //Biblioteca para realizar requisições por HTTP
 #include <ESP32httpUpdate.h> //Biblioteca que possibilita OTA por checagem HTTP
 
+
 WiFiClient redisConn;
 //Variable Redis
 Redis redis(redisConn);
 
 int version_in_Redis;
 //Colocar a versão atual do firmware
-int versionCurrent = 0;
+int versionCurrent = 1;
 
 
 void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on_display,int *number_samples_mean){
@@ -57,7 +58,7 @@ void redisStart(float *deep_sleep_time,int *time_beetwen_samples, float *time_on
         Serial.println("Version in Redis:"+v);
         version_in_Redis = v.toInt();
         checkUpdate();
-        Serial.println("!!!!!Nova Versão!!!!!");
+        Serial.println("!!!!!Nova Versão V1 !!!!!");
 
     }
     else

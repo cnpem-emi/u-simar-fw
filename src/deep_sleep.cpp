@@ -6,8 +6,9 @@
 
 touch_pad_t touchPin;
 
-//hibernation function.
-void hibernation_sleep(float time_deep_sleep){
+/// @brief Função que coloca o esp no estado de hibernação
+/// @param time_deep_sleep tempo de sono do ESP
+void hibernation_sleep(float time_deep_sleep, boolean active_touch){
     Serial.println("Going to sleep...");
     Serial.println("Tempo"+String(time_deep_sleep));
 
@@ -36,11 +37,16 @@ void hibernation_sleep(float time_deep_sleep){
     // esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_TIMER);
     //esp_sleep_enable_ext0_wakeup(GPIO_NUM_32,1);
     
-    //Setup interrupt on Touch Pad 3 (GPIO15)
-    touchAttachInterrupt(T0, callback, Threshold);
-
-    //Configure Touchpad as wakeup source
-    esp_sleep_enable_touchpad_wakeup();
+    
+    if(active_touch){
+      //Setup interrupt on Touch Pad 4 (GPIO4)
+      touchAttachInterrupt(T0, callback, Threshold);
+      //Configure Touchpad as wakeup source
+      esp_sleep_enable_touchpad_wakeup();
+    }else{
+      esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_TOUCHPAD);
+    }
+    
     
     //Disconnect Wifi
     WiFi.disconnect(true);
@@ -57,7 +63,7 @@ void hibernation_sleep(float time_deep_sleep){
     esp_sleep_enable_timer_wakeup(time_deep_sleep * 60L * 1000000L);
     //set CPU frequency 
     setCpuFrequencyMhz(80);
-    
+    //Função que isola o pulldown do pino 2
     rtc_gpio_isolate(GPIO_NUM_2);
 
     // Go to sleep! Zzzz
@@ -66,7 +72,7 @@ void hibernation_sleep(float time_deep_sleep){
     
 }
 
-
+/// @brief Printa a razão pelo o qual o esp foi acordado
 void print_wakeup_reason(){
   esp_sleep_wakeup_cause_t wakeup_reason;
 
@@ -83,6 +89,7 @@ void print_wakeup_reason(){
   }
 }
 
+/// @brief Exibe qual tochpad acordou do ESP
 void print_wakeup_touchpad(){
   touchPin = esp_sleep_get_touchpad_wakeup_status();
 
@@ -101,7 +108,7 @@ void print_wakeup_touchpad(){
     default : Serial.println("Wakeup not by touchpad"); break;
   }
 }
-
+/// @brief Função chamada pelo acionamento do touchpad
 void callback(){
   delay(2000);
 }

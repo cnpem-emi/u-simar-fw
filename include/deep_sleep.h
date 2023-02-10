@@ -12,7 +12,7 @@
 
 void print_wakeup_reason();
 void print_wakeup_touchpad();
-void hibernation_sleep(float time_deep_sleep);
+void hibernation_sleep(float time_deep_sleep, boolean active_touch);
 void callback();
 
 #endif //_DEEP_SLEEP_H_

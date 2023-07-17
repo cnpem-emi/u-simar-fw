@@ -47,7 +47,7 @@ void hibernation_sleep(float time_deep_sleep, boolean active_touch){
       esp_sleep_disable_wakeup_source(ESP_SLEEP_WAKEUP_TOUCHPAD);
     }
     
-    
+  
     //Disconnect Wifi
     WiFi.disconnect(true);
     WiFi.mode(WIFI_OFF);
@@ -110,5 +110,5 @@ void print_wakeup_touchpad(){
 }
 /// @brief Função chamada pelo acionamento do touchpad
 void callback(){
-  delay(2000);
+  //delay(2000);
 }
